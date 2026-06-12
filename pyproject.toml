@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build]
+only-include = [
+    "LICENSE",
+    "README.md",
+    "json_accessor_lib.py",
+]
+
+[tool.coverage.report]
+exclude_also = [
+    "raise NotImplementedError\\(\\)?",
+]
+
+[project]
+name = "json-accessor-lib"
+version = "1.0.0"
+authors = [
+  { name="eypowxoa", email="nepozitron@gmail.com" },
+]
+dependencies = [
+    "atomic-filesystem-lib @ git+https://github.com/eypowxoa/python-atomic-filesystem-lib.git",
+    "typed-accessor-lib @ git+https://github.com/eypowxoa/python-typed-accessor-lib.git",
+    "virtual-path-lib @ git+https://github.com/eypowxoa/python-virtual-path-lib.git",
+]
+description = "Read and write JSON."
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/eypowxoa/python-json-accessor-lib"
+Issues = "https://github.com/eypowxoa/python-json-accessor-lib/issues"
