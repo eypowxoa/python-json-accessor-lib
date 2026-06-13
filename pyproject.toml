@@ -19,7 +19,7 @@ exclude_also = [
 
 [project]
 name = "json-accessor-lib"
-version = "1.0.0"
+version = "2.0.0"
 authors = [
   { name="eypowxoa", email="nepozitron@gmail.com" },
 ]

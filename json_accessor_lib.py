@@ -24,10 +24,10 @@ class JsonReadError(JsonAccessorError):
 class JsonAccessor(Protocol):
     """Protocol for accessing JSON data."""
 
-    def read[T: int | str](
+    def read[T: (int, str)](
         self,
         path: VirtualPath,
-        key_type: type[T] = int | str,
+        key_type: type[T] = str,
     ) -> TypedAccessor[T]:
         """
         Reads JSON data from `path`. Parameter `key_type`
@@ -57,10 +57,10 @@ class FilesystemJsonAccessor:
     def __init__(self, fs: FilesystemProtocol):
         self._fs: FilesystemProtocol = fs
 
-    def read[T: int | str](
+    def read[T: (int, str)](
         self,
         path: VirtualPath,
-        key_type: type[T] = int | str,
+        key_type: type[T] = str,
     ) -> TypedAccessor[T]:
         """
         Reads JSON data from `path`. Parameter `key_type`
@@ -69,13 +69,7 @@ class FilesystemJsonAccessor:
         Raises `JsonDecodeError` if file not a JSON array or object or has errors.
         Raises `JsonAccessorError` for any unknown error.
         """
-        if key_type is int:
-            source_type = list
-        elif key_type is str:
-            source_type = dict
-        else:
-            source_type = dict | list
-
+        source_type = list[int] if key_type is int else dict[str, object]
         try:
             json = b"".join(self._fs.load_file(path))
             return TypedAccessor[T](loads(json), source_type)
@@ -114,10 +108,10 @@ class MemoryJsonAccessor:
     def __init__(self, data: dict[str, object] | None = None):
         self.data: dict[str, str] = {k: dumps(v) for k, v in (data or dict()).items()}
 
-    def read[T: int | str](
+    def read[T: (int, str)](
         self,
         path: VirtualPath,
-        key_type: type[T] = int | str,
+        key_type: type[T] = str,
     ) -> TypedAccessor[T]:
         """
         Reads JSON data from `path`. Parameter `key_type`
@@ -126,13 +120,7 @@ class MemoryJsonAccessor:
         Raises `JsonDecodeError` if file not a JSON array or object or has errors.
         Raises `JsonAccessorError` for any unknown error.
         """
-        if key_type is int:
-            source_type = list
-        elif key_type is str:
-            source_type = dict
-        else:
-            source_type = dict | list
-
+        source_type = list[int] if key_type is int else dict[str, object]
         try:
             json = self.data[str(path)]
             return TypedAccessor[T](loads(json), source_type)
